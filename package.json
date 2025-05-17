@@ -49,6 +49,10 @@
       {
         "command": "filesExporter.copyFile",
         "title": "Copiar contenido al portapapeles"
+      },
+      {
+        "command": "filesExporter.manageIgnored",
+        "title": "Gestionar archivos ignorados"
       }
     ],
     "menus": {
@@ -72,6 +76,10 @@
           "command": "filesExporter.copyProject",
           "when": "view == filesExporterView",
           "group": "navigation"
+        },
+        {
+          "command": "filesExporter.manageIgnored",
+          "when": "view == filesExporterView"
         }
       ]
     },

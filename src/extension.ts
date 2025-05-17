@@ -126,6 +126,52 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Comando copyFile registrado');
     context.subscriptions.push(copyFileCmd);
     
+    // ⑥ Comando: gestionar archivos ignorados
+    const manageIgnoredCmd = vscode.commands.registerCommand('filesExporter.manageIgnored', async () => {
+      console.log('Comando manageIgnored ejecutado');
+      
+      // Obtener la configuración actual
+      const config = vscode.workspace.getConfiguration();
+      const currentIgnorePatterns: string[] = config.get('filesExporter.ignore') || [];
+      
+      if (currentIgnorePatterns.length === 0) {
+        vscode.window.showInformationMessage('No hay patrones en la lista de ignorados.');
+        return;
+      }
+      
+      // Crear los items para mostrar al usuario
+      const items = currentIgnorePatterns.map(pattern => ({
+        label: pattern,
+        picked: false
+      }));
+      
+      // Mostrar quickpick con opción de selección múltiple
+      const selectedPatterns = await vscode.window.showQuickPick(items, {
+        placeHolder: 'Selecciona los patrones que deseas eliminar de la lista de ignorados',
+        canPickMany: true
+      });
+      
+      if (!selectedPatterns || selectedPatterns.length === 0) {
+        return; // El usuario canceló o no seleccionó nada
+      }
+      
+      // Crear una nueva lista sin los patrones seleccionados
+      const patternsToRemove = selectedPatterns.map(item => item.label);
+      const newIgnorePatterns = currentIgnorePatterns.filter(pattern => !patternsToRemove.includes(pattern));
+      
+      // Actualizar la configuración
+      await config.update('filesExporter.ignore', newIgnorePatterns, vscode.ConfigurationTarget.Workspace);
+      
+      vscode.window.showInformationMessage(
+        `Se ${patternsToRemove.length === 1 ? 'ha eliminado 1 patrón' : `han eliminado ${patternsToRemove.length} patrones`} de la lista de ignorados.`
+      );
+      
+      // Refrescar la vista
+      treeProvider.refresh();
+    });
+    console.log('Comando manageIgnored registrado');
+    context.subscriptions.push(manageIgnoredCmd);
+    
     console.log('Extensión My Files Exporter activada correctamente');
   } catch (error) {
     console.error('Error al activar la extensión:', error);
