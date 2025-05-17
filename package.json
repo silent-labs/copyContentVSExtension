@@ -1,0 +1,108 @@
+{
+  "name": "my-files-exporter",
+  "displayName": "My Files Exporter",
+  "publisher": "tuPublisher",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:filesExporterView"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "filesExporterContainer",
+          "title": "Exporter",
+          "icon": "media/exporter.svg"
+        }
+      ]
+    },
+    "views": {
+      "filesExporterContainer": [
+        {
+          "id": "filesExporterView",
+          "name": "Proyecto"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "filesExporter.copyProject",
+        "title": "Copiar proyecto al portapapeles"
+      },
+      {
+        "command": "filesExporter.refresh",
+        "title": "Refrescar lista de archivos",
+        "icon": {
+          "light": "media/refresh-light.svg",
+          "dark": "media/refresh-dark.svg"
+        }
+      },
+      {
+        "command": "filesExporter.ignoreFile",
+        "title": "Ignorar archivo/carpeta"
+      },
+      {
+        "command": "filesExporter.copyFile",
+        "title": "Copiar contenido al portapapeles"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "filesExporter.ignoreFile",
+          "when": "view == filesExporterView"
+        },
+        {
+          "command": "filesExporter.copyFile",
+          "when": "view == filesExporterView && viewItem == 'file'"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "filesExporter.refresh",
+          "when": "view == filesExporterView",
+          "group": "navigation"
+        },
+        {
+          "command": "filesExporter.copyProject",
+          "when": "view == filesExporterView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Files Exporter",
+      "properties": {
+        "filesExporter.ignore": {
+          "type": "array",
+          "default": [
+            "node_modules",
+            ".git"
+          ],
+          "description": "Glob patterns a ignorar (p. ej. **/*.spec.ts)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "minimatch": "^9.0.0"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.3.0",
+    "@types/node": "^18.18.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.0"
+  }
+}
