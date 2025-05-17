@@ -10,15 +10,15 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('Activando extensión My Files Exporter...');
   
   try {
-    const treeProvider = new FileTreeProvider();
+  const treeProvider = new FileTreeProvider();
     console.log('Proveedor de árbol de archivos creado correctamente');
 
-    // ① Registrar la vista y guardar el Disposable en las suscripciones
+  // ① Registrar la vista y guardar el Disposable en las suscripciones
     const treeView = vscode.window.registerTreeDataProvider('filesExporterView', treeProvider);
     console.log('Vista de árbol registrada:', treeView ? 'OK' : 'Error');
     context.subscriptions.push(treeView);
 
-    // ② Comando: refrescar árbol
+  // ② Comando: refrescar árbol
     const refreshCmd = vscode.commands.registerCommand('filesExporter.refresh', () => {
       console.log('Comando refresh ejecutado');
       treeProvider.refresh();
@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Comando refresh registrado');
     context.subscriptions.push(refreshCmd);
 
-    // ③ Comando: copiar proyecto completo
+  // ③ Comando: copiar proyecto completo
     const copyCmd = vscode.commands.registerCommand('filesExporter.copyProject', copyWholeProject);
     console.log('Comando copyProject registrado');
     context.subscriptions.push(copyCmd);

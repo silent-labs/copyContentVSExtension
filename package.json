@@ -1,7 +1,7 @@
 {
   "name": "my-files-exporter",
   "displayName": "My Files Exporter",
-  "publisher": "tuPublisher",
+  "publisher": "silent-labs",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.90.0"
